@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>留言板 - Supabase 示例</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h2>留言板</h2>
+    <div>
+        <input type="text" id="username" placeholder="你的名字">
+        <br>
+        <textarea id="content" rows="3" cols="40" placeholder="写点什么..."></textarea>
+        <br>
+        <button onclick="addReply()">发送</button>
+    </div>
+    <hr>
+    <div id="repliesList"></div>
+
+    <!-- 引入 Supabase JS 客户端（通过 CDN） -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // 替换为你的 Supabase 项目信息
+        const SUPABASE_URL = 'https://你的项目标识.supabase.co';
+        const SUPABASE_KEY = '你的 anon key';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // 加载所有回复，按时间倒序
+        async function loadReplies() {
+            const { data, error } = await supabase
+                .from('replies')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('加载失败', error);
+                return;
+            }
+
+            const container = document.getElementById('repliesList');
+            container.innerHTML = data.map(rep => `
+                <div style="border:1px solid #ccc; margin:8px; padding:8px;">
+                    <strong>${escapeHtml(rep.username)}</strong> 
+                    <small>${new Date(rep.created_at).toLocaleString()}</small>
+                    <p>${escapeHtml(rep.content)}</p>
+                </div>
+            `).join('');
+        }
+
+        // 添加新回复
+        async function addReply() {
+            const username = document.getElementById('username').value.trim();
+            const content = document.getElementById('content').value.trim();
+
+            if (!username || !content) {
+                alert('请填写姓名和内容');
+                return;
+            }
+
+            const { error } = await supabase
+                .from('replies')
+                .insert([{ username, content }]);
+
+            if (error) {
+                alert('发送失败: ' + error.message);
+                return;
+            }
+
+            // 清空输入框并刷新列表
+            document.getElementById('username').value = '';
+            document.getElementById('content').value = '';
+            loadReplies();
+        }
+
+        // 简单的防 XSS 函数
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return 'and';
+                if (m === '<') return 'small than;';
+                if (m === '>') return 'greater than;';
+                return m;
+            });
+        }
+
+        // 页面加载时显示已有回复
+        loadReplies();
+    </script>
+</body>
+</html>
