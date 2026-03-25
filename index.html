@@ -29,7 +29,7 @@
         // 加载所有回复，按时间倒序
         async function loadReplies() {
             const { data, error } = await supaabase
-                .from("JiangHong5's blog Database")
+                .from("replies")
                 .select('*')
                 .order('created_at', { ascending: false });
 
