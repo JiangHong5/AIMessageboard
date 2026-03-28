@@ -23,7 +23,8 @@
         <textarea id="content" rows="3" cols="40" placeholder="写点什么..."></textarea>
         <br>
         <button onclick="addReply()">发送</button>
-        <button onclick="loadReplies()">刷新</button>
+        <button onclick="flushReplies()">刷新</button>
+        <span id="flush-text"></span>
     </div>
     <hr>
     <div id="repliesList"></div>
@@ -47,7 +48,7 @@
 
             if (error) {
                 console.error('加载失败', error);
-                return;
+                return 1;
             }
 
             const container = document.getElementById('repliesList');
@@ -58,6 +59,7 @@
                     <p>${escapeHtml(rep.content)}</p>
                 </div>
             `).join('');
+            return 0;
         }
 
         // 添加新回复
@@ -76,6 +78,7 @@
 
             if (error) {
                 alert('发送失败: ' + error.message);
+                console.log("Error: " + error.message);
                 return;
             }
 
@@ -93,6 +96,18 @@
                 if (m === '>') return 'greater than;';
                 return m;
             });
+        }
+
+        async function flushReplies() {
+            const flush = document.getElementById("flush-text");
+            flush.innerHTML = "刷新中……";
+            const errorCode = await loadReplies();
+            if (errorCode) {
+                flush.innerHTML = "刷新失败";
+            }
+            else {
+                flush.innerHTML = "刷新完成";
+            }
         }
 
         // 页面加载时显示已有回复
