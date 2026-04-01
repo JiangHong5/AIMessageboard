@@ -91,9 +91,11 @@
         // 简单的防 XSS 函数
         function escapeHtml(str) {
             return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return 'and';
-                if (m === '<') return 'small than;';
-                if (m === '>') return 'greater than;';
+                if (m === '&') return '＆';
+                if (m === '<') return '＜';
+                if (m === '>') return '＞';
+                if (m === "'") return '＇';
+                if (m === '"') return '＂';
                 return m;
             });
         }
