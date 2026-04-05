@@ -16,23 +16,25 @@
             </div>
         </nav>
     </div>
-    <h2>留言板</h2>
-    <div>
-        <input type="number" id="group-id" placeholder="群id" value="0">
-        <button onclick="enterGroup()">进入群组</button>
-        <br>
-        <input type="text" id="username" placeholder="你的名字">
-        <br>
-        <textarea id="content" rows="3" cols="40" placeholder="写点什么..."></textarea>
-        <br>
-        <button onclick="addReply()">发送</button>
-        <button onclick="flushReplies()">刷新</button>
-        <span id="flush-text"></span>
+    <div id="content">
+        <h2>留言板</h2>
+        <div>
+            <input type="number" id="group-id" placeholder="群id" value="0">
+            <button onclick="enterGroup()">进入群组</button>
+            <br>
+            <input type="text" id="username" placeholder="你的名字">
+            <br>
+            <textarea id="content" rows="3" cols="40" placeholder="写点什么..."></textarea>
+            <br>
+            <button onclick="addReply()">发送</button>
+            <button onclick="flushReplies()">刷新</button>
+            <span id="flush-text"></span>
+        </div>
+        <hr>
+        <h2 id="group-title"></h2>
+        <div id="repliesList"></div>
     </div>
-    <hr>
-    <h2 id="group-title"></h2>
-    <div id="repliesList"></div>
-
+    
     <!-- 引入 Supabase JS 客户端（通过 CDN） -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
