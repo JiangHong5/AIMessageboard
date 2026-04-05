@@ -30,6 +30,7 @@
         <span id="flush-text"></span>
     </div>
     <hr>
+    <h3 id="group-title"></h3>
     <div id="repliesList"></div>
 
     <!-- 引入 Supabase JS 客户端（通过 CDN） -->
@@ -48,7 +49,7 @@
         async function enterGroup() {
             const group_input = document.getElementById("group-id");
             group_id = group_input.value.trim();
-            const { group_name, error } = await supaabase
+            const { data, error } = await supaabase
                 .from("groups")
                 .select('*')
                 .eq("id", group_id)
@@ -58,7 +59,10 @@
                 group_id = null;
                 return;
             }
+            let group_name = data[0].group_name;
+            const group_title = document.getElementById("group-title");
             flush.innerHTML = "已进入群组" + group_name;
+            group_title.innerHTML = group_name;
         }
         
         // 加载所有回复，按时间倒序
