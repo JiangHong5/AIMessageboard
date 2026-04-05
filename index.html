@@ -18,6 +18,8 @@
     </div>
     <h2>留言板</h2>
     <div>
+        <input type="number" id="group-id" placeholder="群id" value="0">
+        <button onclick="enterGroup()">进入群组</button>
         <input type="text" id="username" placeholder="你的名字">
         <br>
         <textarea id="content" rows="3" cols="40" placeholder="写点什么..."></textarea>
@@ -38,7 +40,27 @@
         const SUPABASE_KEY = 'sb_publishable_eGbaAhcU3T8XUsbCNc5Ldg_-J5IDR5k';
 
         const supaabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        const flush = document.getElementById("flush-text");
+        let group_id = null;
 
+        async function enterGroup() {
+            const group_input = document.getElementById("group-id");
+            group_id = group_input.value.trim();
+            const { group_name, error } = await supaabase
+                .from("groups")
+                .select('*')
+                .eq("id", group_id)
+                .single();
+            if (error) {
+                flush.innerHTML = "进入群组时错误";
+                console.log("Error: While entering group " + group_id + ", an error occured: " + error.message);
+                group_id = null;
+                return;
+            }
+            flush.innerHTML = "已进入群组" + group_name;
+        }
+        
         // 加载所有回复，按时间倒序
         async function loadReplies() {
             const { data, error } = await supaabase
@@ -72,6 +94,11 @@
                 return;
             }
 
+            if (group_id === null) {
+                alert("请先加入一个群组");
+                return;
+            }
+            
             const { error } = await supaabase
                 .from('replies')
                 .insert([{ username, content }]);
@@ -101,7 +128,6 @@
         }
 
         async function flushReplies() {
-            const flush = document.getElementById("flush-text");
             flush.innerHTML = "刷新中……";
             const errorCode = await loadReplies();
             if (errorCode) {
