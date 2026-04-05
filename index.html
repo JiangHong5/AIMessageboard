@@ -52,7 +52,6 @@
                 .from("groups")
                 .select('*')
                 .eq("id", group_id)
-                .single();
             if (error) {
                 flush.innerHTML = "进入群组时错误";
                 console.log("Error: While entering group " + group_id + ", an error occured: " + error.message);
