@@ -66,6 +66,7 @@
             const { data, error } = await supaabase
                 .from("replies")
                 .select('*')
+                .eq("group_id", group_id)
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -101,7 +102,7 @@
             
             const { error } = await supaabase
                 .from('replies')
-                .insert([{ username, content }]);
+                .insert([{ username, content, group_id }]);
 
             if (error) {
                 alert('发送失败: ' + error.message);
