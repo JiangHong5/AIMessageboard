@@ -44,7 +44,7 @@
         const supaabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const flush = document.getElementById("flush-text");
-        let group_id = null;
+        let group_id = 0;
 
         async function enterGroup() {
             const group_input = document.getElementById("group-id");
@@ -143,6 +143,7 @@
             }
         }
 
+        enterGroup();
         // 页面加载时显示已有回复
         loadReplies();
     </script>
