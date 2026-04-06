@@ -31,7 +31,7 @@
             <span id="flush-text"></span>
         </div>
         <hr>
-        <h2 id="group-title"></h2>
+        <span id="group-title"></span>
         <div id="repliesList"></div>
     </div>
     
@@ -66,7 +66,7 @@
             let group_name = data.group_name;
             const group_title = document.getElementById("group-title");
             flush.innerHTML = "已进入群组" + group_name;
-            group_title.innerHTML = group_name;
+            group_title.innerHTML = `<span style="font-size: 1.5em"><strong>${group_name}</strong></span> <span style="font-size: small">群号：${group_id}</span>`;
         }
         
         // 加载所有回复，按时间倒序
