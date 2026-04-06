@@ -139,7 +139,7 @@
 
         // 简单的防 XSS 函数
         function escapeHtml(str) {
-            return str.replace(/[&<>]/g, function(m) {
+            return str.replace(/[&<>'"]/g, function(m) {
                 if (m === '&') return '＆';
                 if (m === '<') return '＜';
                 if (m === '>') return '＞';
