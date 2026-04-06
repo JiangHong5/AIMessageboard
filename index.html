@@ -65,12 +65,12 @@
             console.log(data);
             let group_name = data.group_name;
             const group_title = document.getElementById("group-title");
-            flush.innerHTML = "已进入群组" + group_name;
+            flush.innerHTML = "已进入群组：" + group_name;
             group_title.innerHTML = `
             <span style="font-size: 1.5em">
                 <strong>${group_name}</strong>
             </span>
-            <span style="font-size: small">群号：${group_id}</span>
+            <span style="font-size: small">群号:   ${group_id}</span>
             `;
             loadReplies();
         }
