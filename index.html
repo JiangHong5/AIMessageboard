@@ -50,19 +50,26 @@
 
         async function enterGroup() {
             const group_input = document.getElementById("group-id");
+            let last_id = group_id;
             group_id = group_input.value.trim();
             const { data, error } = await supaabase
                 .from("groups")
                 .select('*')
                 .eq("id", group_id)
-                .single();
             if (error) {
                 flush.innerHTML = "进入群组时错误";
                 console.log("Error: While entering group " + group_id + ", an error occured: " + error.message);
-                // group_id = null;
+                group_id = last_id;
                 return;
             }
             console.log(data);
+            if (data.length != 1) {
+                flush.innerHTML = "群组数据错误";
+                console.log("Error: Multiple/No data for group " + group_id + ": length is " + data.length);
+                group_id = last_id;
+                return;
+            }
+            data = data[0];
             let group_name = data.group_name;
             const group_title = document.getElementById("group-title");
             flush.innerHTML = "已进入群组：" + group_name;
