@@ -51,7 +51,7 @@
         async function enterGroup() {
             const group_input = document.getElementById("group-id");
             let last_id = group_id;
-            group_id = group_input.value.trim();
+            group_id = parseInt(group_input.value, 10);
             const { data, error } = await supaabase
                 .from("groups")
                 .select('*')
