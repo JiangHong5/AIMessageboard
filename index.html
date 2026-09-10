@@ -105,7 +105,11 @@
         
         // 加载所有回复，按时间倒序
         async function loadReplies() {
-            console.log("load replies")
+            console.log("load replies");
+            if (group_id === null) {
+                flush.innerHTML = "请先加入一个群组";
+                return 1;
+            }
             const { data, error } = await supaabase
                 .from("replies")
                 .select('*')
