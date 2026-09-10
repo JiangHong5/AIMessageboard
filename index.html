@@ -164,6 +164,8 @@
                 flush.innerHTML = "发送失败";
                 return;
             }
+            
+            flush.innerHTML = "发送成功";
 
             // 清空输入框并刷新列表
             // document.getElementById('username').value = '';
@@ -206,8 +208,10 @@
             group_id = null;
             const groupTitle = document.getElementById("group-title");
             const loadedReplies = document.getElementById("repliesList");
+            const flushText = document.getElementById("flush-text");
             groupTitle.textContent = "已退出群组。";
             loadedReplies.innerHTML = "";
+            flushText.innerHTML = "";
         }
 
         enterGroup();
