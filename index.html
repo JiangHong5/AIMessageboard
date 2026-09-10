@@ -39,6 +39,7 @@
             <br>
             <button onclick="addReply()">发送</button>
             <button onclick="flushReplies()">刷新</button>
+            <button onclick="quitGroup()">退出群组</button>
             <br/>
             <button id="toggle-reply-button" onclick="toggleReplyInputAppearance()">点击开启回复功能</button>
             <div style="display: flex">
@@ -199,6 +200,14 @@
             replying = !replying;
             container.style.display = replying ? 'flex' : 'none';
             button.textContent = replying ? '点击关闭回复功能' : '点击开启回复功能';
+        }
+
+        function quitGroup() {
+            group_id = null;
+            const groupTitle = document.getElementById("group-title");
+            const loadedReplies = document.getElementById("repliesList");
+            groupTitle.textContent = "已退出群组。";
+            loadedReplies.innerHTML = "";
         }
 
         enterGroup();
