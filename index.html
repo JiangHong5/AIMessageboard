@@ -118,6 +118,7 @@
 
             if (error) {
                 console.error('加载失败', error);
+                flush.innerHTML = "加载失败: " + error.message;
                 return 1;
             }
 
