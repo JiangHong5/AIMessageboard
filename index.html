@@ -149,12 +149,12 @@
 
             if (!username || !content) {
                 alert('请填写姓名和内容');
-                return;
+                return 1;
             }
 
             if (group_id === null) {
                 alert("请先加入一个群组");
-                return;
+                return 1;
             }
 
             flush.innerHTML = "发送中……";
@@ -167,15 +167,21 @@
                 alert('发送失败: ' + error.message);
                 console.log("Error: " + error.message);
                 flush.innerHTML = "发送失败";
-                return;
+                return 1;
             }
             
             flush.innerHTML = "发送成功";
 
+            const code = loadReplies();
+            if (code) {
+                flush.innerHTML += "而刷新失败";
+                return 1;
+            }
+
             // 清空输入框并刷新列表
             // document.getElementById('username').value = '';
             document.getElementById('content').value = '';
-            loadReplies();
+            
         }
 
         // 简单的防 XSS 函数
