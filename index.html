@@ -172,8 +172,8 @@
             
             flush.innerHTML = "发送成功";
 
-            const code = loadReplies();
-            console.log(code);
+            const code = await loadReplies();
+            // console.log(code);
             if (code) {
                 flush.innerHTML += "而刷新失败";
                 return 1;
