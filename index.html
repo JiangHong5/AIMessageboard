@@ -51,6 +51,12 @@
             <span id="flush-text"></span>
         </div>
         <hr>
+        <p>alpha用户系统</p>
+        <p>将会生成一个加的邮箱地址</p>
+        <input type="text" id="reg_username" placeholder="名字">
+        <input type="text" id="reg_password" placeholder="密码">
+        <button onclick="register()">
+        <hr>
         <span id="group-title"></span>
         <div id="repliesList"></div>
     </div>
@@ -224,6 +230,32 @@
             groupTitle.textContent = "已退出群组。";
             loadedReplies.innerHTML = "";
             flushText.innerHTML = "";
+        }
+
+        async function register() {
+            // const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('reg_password').value.trim();
+            const username = document.getElementById('reg_username').value.trim();
+        
+            const { data, error } = await supa.auth.signUp({
+                `{username}_notreal@JHCode5.com`,
+                password,
+                options: {
+                    data: { username }   // 存到 user_metadata
+                }
+            });
+        
+            if (error) {
+                alert('注册失败: ' + error.message);
+                return;
+            }
+        
+            // 如果项目开启了邮箱确认，此时用户还没正式激活
+            if (data.user && !data.session) {
+                alert('注册成功，请去邮箱确认');
+            } else {
+                alert('注册成功，已自动登录');
+            }
         }
 
         enterGroup();
