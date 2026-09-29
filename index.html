@@ -237,7 +237,7 @@
             const password = document.getElementById('reg_password').value.trim();
             const username = document.getElementById('reg_username').value.trim();
         
-            const { data, error } = await supa.auth.signUp({
+            const { data, error } = await supaabase.auth.signUp({
                 `${username}_notreal@JHCode5.com`,
                 password,
                 options: {
