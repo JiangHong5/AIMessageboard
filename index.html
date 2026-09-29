@@ -238,7 +238,7 @@
             const username = document.getElementById('reg_username').value.trim();
         
             const { data, error } = await supa.auth.signUp({
-                `{username}_notreal@JHCode5.com`,
+                `${username}_notreal@JHCode5.com`,
                 password,
                 options: {
                     data: { username }   // 存到 user_metadata
