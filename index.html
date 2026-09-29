@@ -52,10 +52,10 @@
         </div>
         <hr>
         <p>alpha用户系统</p>
-        <p>将会生成一个加的邮箱地址</p>
+        <p>将会生成一个假的邮箱地址</p>
         <input type="text" id="reg_username" placeholder="名字">
         <input type="text" id="reg_password" placeholder="密码">
-        <button onclick="register()">
+        <button onclick="register()">注册</button>
         <hr>
         <span id="group-title"></span>
         <div id="repliesList"></div>
@@ -238,7 +238,7 @@
             const username = document.getElementById('reg_username').value.trim();
         
             const { data, error } = await supaabase.auth.signUp({
-                `${username}_notreal@JHCode5.com`,
+                username: `${username}_notreal@JHCode5.com`,
                 password,
                 options: {
                     data: { username }   // 存到 user_metadata
