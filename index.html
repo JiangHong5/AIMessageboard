@@ -261,6 +261,8 @@
         enterGroup();
         // 页面加载时显示已有回复
         loadReplies();
+        // “轮询”
+        setInterval(loadReplies, 10000);
     </script>
 </body>
 </html>
