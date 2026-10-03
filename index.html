@@ -81,6 +81,10 @@
         document.getElementById("group-id").value = group_id;
         let replying = false;
 
+// -------- Deepseek wrote start --------
+        let anchorHandled = false;
+// -------- Deepseek wrote end --------
+
         async function enterGroup() {
             const group_input = document.getElementById("group-id");
             let last_id = group_id;
@@ -171,6 +175,26 @@
                     </div>
                 `
             }))).join('');
+
+// -------- Deepseek wrote start --------
+            // 加载完后，如果 URL 里有 #reply-xxx，手动滚过去
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#reply-') && !anchorHandled) {
+                const targetId = hash.slice(1);          // "reply-336"
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // 高亮一下，让用户看清
+                    const oldBg = target.style.background;
+                    target.style.transition = 'background 0.5s';
+                    target.style.background = '#fff3a0';
+                    setTimeout(() => {
+                        target.style.background = oldBg;
+                    }, 1500);
+                }
+            }
+// -------- Deepseek wrote end --------
+
             return 0;
         }
 
