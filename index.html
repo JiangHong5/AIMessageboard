@@ -72,7 +72,13 @@
         const supaabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const flush = document.getElementById("flush-text");
-        let group_id = 0;
+        let group_id = parseInt(
+            new URLSearchParams(window.location.search)
+            .get("group_id") ?? "0",        // 找到网址里要到的群号，默认为主群
+            10,
+        );
+        console.log("group_id: " + group_id);
+        document.getElementById("group-id").value = group_id;
         let replying = false;
 
         async function enterGroup() {
@@ -134,15 +140,37 @@
 
             console.log("Replies data: " + data.map(rep => `${rep.reply_to ? `<a href="#reply-${rep.reply_to}"><small>回复给: #${rep.reply_to}</small></a><br>` : ''}`).join(""))
 
-            container.innerHTML = data.map(rep => `
-                <div id="reply-${rep.id}" style="border:1px solid #ccc; margin:8px; padding:8px;">
-                    ${rep.reply_to ? `<a href="#reply-${rep.reply_to}"><small>回复给: #${rep.reply_to}</small></a><br>` : ''}
-                    <strong>${escapeHtml(rep.username)}</strong> 
-                    <small>${new Date(rep.created_at).toLocaleString()}</small>
-                    <p>${escapeHtml(rep.content)}</p>
-                    <small>id: ${rep.id}</small>
-                </div>
-            `).join('');
+            container.innerHTML = (await Promise.all(data.map(async rep => {
+                if (!rep.reply_to) 
+                    return `
+                        <div id="reply-${rep.id}" style="border:1px solid #ccc; margin:8px; padding:8px;">
+                            <strong>${escapeHtml(rep.username)}</strong> 
+                            <small>${new Date(rep.created_at).toLocaleString()}</small>
+                            <p>${escapeHtml(rep.content)}</p>
+                            <small>id: ${rep.id}</small>
+                        </div>
+                    `;
+                const { data, error } = await supaabase
+                    .from('replies')
+                    .select('id, group_id, username, content')
+                    .eq('id', rep.reply_to)
+                    .single();
+
+                if (error) {
+                    // alert('查不到这个回复的消息在那个群组：' + error.message);
+                    console.error('查不到这个回复的消息在那个群组：' + error.message);
+                    return null;
+                }
+                return `
+                    <div id="reply-${rep.id}" style="border:1px solid #ccc; margin:8px; padding:8px;">
+                        ${rep.reply_to ? `<a href="?group_id=${data.group_id}#reply-${rep.reply_to}"><small>回复给: #${rep.reply_to}</small></a><br>` : ''}
+                        <strong>${escapeHtml(rep.username)}</strong> 
+                        <small>${new Date(rep.created_at).toLocaleString()}</small>
+                        <p>${escapeHtml(rep.content)}</p>
+                        <small>id: ${rep.id}</small>
+                    </div>
+                `
+            }))).join('');
             return 0;
         }
 
